@@ -1,0 +1,41 @@
+version: '3.1'
+
+services:
+
+  dotnet:
+    build: .docker/dotnet
+    container_name: dotnet
+    working_dir: /app
+    volumes:
+      - ./containers/dotnet-app:/app  # Mount your .NET project folder
+    ports:
+      - "5151:5151"  # Map container port 5151 to host
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - ASPNETCORE_URLS=
+    stdin_open: true
+    tty: true
+    networks:
+      - app
+
+  dotnet-api:
+    build: .docker/dotnet
+    container_name: dotnet-api
+    working_dir: /app
+    volumes:
+      - ./containers/dotnet-api:/app  # Mount your .NET project folder
+    ports:
+      - "5153:5151"  # Map container port 5151 to host
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - DOTNET_USE_POLLING_FILE_WATCHER=1
+      - ASPNETCORE_URLS=
+    stdin_open: true
+    tty: true
+    networks:
+      - app
+
+networks:
+  app:
+    driver: bridge
